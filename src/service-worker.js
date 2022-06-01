@@ -61,6 +61,17 @@ registerRoute(
   })
 );
 
+// const version = "app-comprar-v5"
+
+self.addEventListener('install', event => {
+  console.log(`Instalando nueva versión...`);
+  self.registration.showNotification("Nueva versión de la App Lista de Compras")
+});
+
+self.addEventListener('activate', event => {
+  console.log(`¡Activada nueva versión!`)
+});
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
@@ -69,4 +80,6 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+self.addEventListener('push', e =>{
+  console.log(e)
+})

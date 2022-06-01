@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { withServiceWorkerUpdater } from "@3m1/service-worker-updater";
 
-function App() {
+const initialState = [];
+
+const App = (props) => {
+  const { newServiceWorkerDetected, onLoadNewServiceWorkerAccept } = props;
+
+  const [compra, setCompra] = useState(initialState);
+  const [newProducto, setNewProducto] = useState("");
+
+  const inputNewProducto = (e) => {
+    setNewProducto(e.target.value);
+  };
+
+  const addNewProducto = () => {
+    setCompra([...compra, newProducto]);
+    setNewProducto("");
+  };
+
+  const clearInput = (e) => {
+    e.key === "Enter" && addNewProducto();
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1> Lista de compra v5</h1>
+        {newServiceWorkerDetected && (
+          <div style={{ backgroundColor: "red", marginBottom: 20 }}>
+            <h3>¡Nueva actualización! ¿Quieres actualizar?</h3>
+            <button onClick={onLoadNewServiceWorkerAccept}>¡Actualizar!</button>
+          </div>
+        )}
+        <input
+          type={"text"}
+          onKeyPress={clearInput}
+          onChange={inputNewProducto}
+          value={newProducto}
+          autoFocus
+        />
+        <button onClick={addNewProducto}>Añadir</button>
+        <ul>
+          {compra.map((productos) => (
+            <li key={productos}>{productos}</li>
+          ))}
+        </ul>
       </header>
     </div>
   );
-}
+};
 
-export default App;
+export default withServiceWorkerUpdater(App);
