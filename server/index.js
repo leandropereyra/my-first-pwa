@@ -26,16 +26,16 @@ const pushSubscription = {
 };
 
 webpush.setVapidDetails(
-  'mailto:example@example.com',
+  "mailto:example@example.com",
   vapidKeys.publicKey,
   vapidKeys.privateKey
 );
 
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
   res.sendStatus(200).json();
   const payload = JSON.stringify({
     title: "Título de notificación",
-    message: "Mensaje de la notificación"
+    message: "Mensaje de la notificación",
   });
   try {
     await webpush.sendNotification(pushSubscription, payload);
