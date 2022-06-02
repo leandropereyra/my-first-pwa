@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+            crossorigin="anonymous">
+        <title>Servidor Web-Push</title>
+    </head>
+
+    <body style="background-color: #202020; color: aliceblue;">
+        <div class="container mt-5">
+            <h1>Enviar mensajes PUSH</h1>
+            <div class="mt-5">
+                <form id="forNotification" style="color: #202020">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="title"
+                            placeholder="name@example.com">
+                        <label for="title">Título</label>
+                    </div>
+                    <div class="form-floating">
+                        <textarea type="text" class="form-control" id="message"
+                            placeholder="Password"></textarea>
+                        <label for="message">Mensaje</label>
+                    </div>
+                    <div class="mt-5">
+                        <button class="btn btn-outline-success m-2">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+    <script>
+    const form = document.querySelector('#forNotification');
+    const message = document.querySelector('#message');
+    const title = document.querySelector('#title');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        fetch('/new-message', {
+            method: 'POST',
+            body: JSON.stringify({ message: message.value, title: title.value }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        form.reset();
+    });
+</script>
+</html>

@@ -1,6 +1,3 @@
-//Para leer variables de entorno
-require("dotenv").config();
-
 const express = require("express");
 
 const cors = require("cors");
@@ -14,8 +11,11 @@ const morgan = require("morgan");
 const app = express();
 
 app.use(morgan("dev"));
+
 app.use(cors());
+
 app.use(express.urlencoded({ extended: false }));
+
 app.use(express.json());
 
 const vapidKeys = {
@@ -41,22 +41,31 @@ webpush.setVapidDetails(
   vapidKeys.privateKey
 );
 
-app.get("/", async (req, res) => {
-  const payload = JSON.stringify({
-    title: "Título de notificación",
-    message: "Mensaje de la notificación",
-  });
+app.post("/subscription", async (req, res) => {
   try {
-    await webpush.sendNotification(pushSubscription, payload);
-    await res.send("Enviado");
+    await res.sendStatus(200).json();
   } catch (e) {
     console.log(e);
   }
 });
 
-app.post("/subscription", (req, res) => {
-  console.log(req.body);
-  res.sendStatus(200).json();
+app.post("/new-message", async (req, res) => {
+  const { message, title } = req.body;
+  const payload = JSON.stringify({
+    title: title,
+    message: message,
+    icon: 'https://toppng.com/uploads/preview/pikachu-logo-115510579622mch5qulg6.png'
+  });
+  try {
+    await webpush.sendNotification(pushSubscription, payload);
+  } catch (e) {
+    console.log(e);
+  }
 });
+
+const path = require("path");
+
+//Static Content (HTML formulario para que se vea en el servidor)
+app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(4000, () => console.log("Server listening on port 4000"));
