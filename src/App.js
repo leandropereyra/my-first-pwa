@@ -15,6 +15,7 @@ const App = (props) => {
   };
 
   const addNewProducto = () => {
+    if (newProducto === "") return; //Si el Input está vacío, no agrega tarea
     setCompra([...compra, newProducto]);
     setNewProducto("");
   };
